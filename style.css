@@ -1,8 +1,17 @@
-body, html {
+body,
+html {
     max-height: 100vh;
     max-width: 100vw;
     overflow-x: hidden;
     overflow-y: hidden;
+}
+
+.container-content{
+    position: d-flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
 }
 
 #question {
@@ -10,7 +19,8 @@ body, html {
     margin: 20px 0;
 }
 
-input, button {
+input,
+button {
     padding: 5px;
     margin: 10px;
 }
@@ -31,6 +41,27 @@ input, button {
     display: none;
 }
 
+#stopwatch {
+    background-color: white;
+    transition: background-color 1s;
+
+    background-color: white;
+    padding: 10px 15px;
+    border-radius: 20px;
+    margin: 10px 0;
+}
+
+
+.record-time {
+    padding: 10px 15px;
+    border-radius: 20px;
+    margin: 10px 0;
+}
+
+.rank-item {
+    padding: 10px 0;
+}
+
 .alert-success {
     animation: slideDown 0.5s forwards;
 }
@@ -39,6 +70,7 @@ input, button {
     0% {
         transform: translateY(-100%);
     }
+
     100% {
         transform: translateY(0);
     }

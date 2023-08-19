@@ -13,7 +13,8 @@
 
 <body>
 
-    <!-- INI STOPWATCH -->
+    <div class="container-content">
+        <!-- INI STOPWATCH -->
     <div class="text-center mt-3">
         <span id="stopwatch">00:00</span>
     </div>
@@ -58,14 +59,12 @@
     <!-- INI KEYPAD NUMERIK END -->
 
     <!-- INI RANKING -->
-    <div id="rankingsContainer" class="container pt-5 text-center">
+    <div id="rankingsContainer" class="container pt-3 text-center">
         <h3 id="rankingTitle" style="display: none;">Ranking</h3>
         <div id="rankingsList"></div>
     </div>
-    
     <!-- INI RANKING END -->
-
-
+    </div>
 
     <!-- INI MODAL SALAH-->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -89,8 +88,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Anda telah menyelesaikan game dalam waktu <span id="finalTime">00:00</span>.
+                    Waktu : <span id="finalTime">00:00</span>.
+                    <br>
+                    Salah : <span id="mistakesCount">0</span>.
                 </div>
+                
                 <div class="modal-footer">
                     <button class="btn btn-success" data-bs-target="#saveRecordModal"
                         data-bs-toggle="modal">Save</button>
