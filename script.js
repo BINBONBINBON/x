@@ -283,4 +283,4 @@ document.querySelector('.btn-warning').addEventListener('click', checkAnswer);
 // Serta pemanggilan berikut ini juga:
 document.querySelector('.btn-success').addEventListener('click', startGame);
 
-questions = generateUniqueQuestions(5);
+questions = generateUniqueQuestions(20);
