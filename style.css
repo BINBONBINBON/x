@@ -1,0 +1,45 @@
+body, html {
+    max-height: 100vh;
+    max-width: 100vw;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#question {
+    font-size: 24px;
+    margin: 20px 0;
+}
+
+input, button {
+    padding: 5px;
+    margin: 10px;
+}
+
+.alert {
+    padding: 10px;
+}
+
+#alert-container {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    z-index: 1000;
+    width: 300px;
+}
+
+#endGameModal .modal-footer .btn-primary {
+    display: none;
+}
+
+.alert-success {
+    animation: slideDown 0.5s forwards;
+}
+
+@keyframes slideDown {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
