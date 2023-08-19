@@ -62,11 +62,11 @@ function checkAnswer() {
         currentQuestionIndex++;
         document.querySelector('.form-control').value = ''; // Membersihkan input
 
-        if (correctAnswers === 2) { // Jika ini adalah pertanyaan sebelum terakhir
+        if (correctAnswers === 19) { // Jika ini adalah pertanyaan sebelum terakhir
             document.querySelector('.btn-warning').textContent = 'Finish';
         }
 
-        if (correctAnswers === 3) {
+        if (correctAnswers === 20) {
             endGame();
         } else {
             displayQuestion();
@@ -208,7 +208,7 @@ function restartGame() {
     document.querySelector('.btn-warning').textContent = 'Submit';
 
     // Buat kumpulan soal baru untuk game yang akan datang
-    questions = generateUniqueQuestions(5);
+    questions = generateUniqueQuestions(20);
     
     startGame();
 }
