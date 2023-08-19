@@ -1,18 +1,24 @@
-body,
-html {
-    max-height: 100vh;
-    max-width: 100vw;
-    overflow-x: hidden;
-    overflow-y: hidden;
+body, html {
+    height: 100%; 
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Menghindari scrollbar */
 }
 
-.container-content{
-    position: d-flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 5vh;
-    margin-bottom: 5vh;
+.main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Pusatkan konten secara vertikal */
+    align-items: center;     /* Pusatkan konten secara horizontal */
+    height: 100%;            /* Ambil seluruh tinggi viewport */
+    padding: 5% 0;           /* Memberikan margin atas dan bawah */
+    box-sizing: border-box;  /* Agar padding tidak menambah tinggi */
 }
+
+#rankingsContainer {
+    min-height: 350px;  /* Anda dapat menyesuaikan nilai ini sesuai dengan kebutuhan */
+}
+
 
 #question {
     font-size: 24px;
@@ -34,7 +40,7 @@ button {
     top: 5px;
     right: 5px;
     z-index: 1000;
-    width: 300px;
+    width: 100px;
 }
 
 #endGameModal .modal-footer .btn-primary {

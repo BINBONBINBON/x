@@ -29,12 +29,12 @@ function startGame() {
     document.getElementById('stopwatch').style.backgroundColor = 'white';
     displayQuestion();
     document.querySelector('.form-control').disabled = false;
-    document.querySelectorAll('.btn-dark, .btn-danger, .btn-warning').forEach(btn => {
+    document.querySelectorAll('.btn-dark, .btn-danger, .btn-primary').forEach(btn => {
         btn.disabled = false;
     });
     const startRestartButton = document.getElementById('startRestartButton');
     startRestartButton.disabled = true;
-    const submitButton = document.querySelector('.btn-warning');
+    const submitButton = document.querySelector('.btn-primary');
     if (submitButton.textContent === 'Start') {
         submitButton.textContent = 'Submit';
     }
@@ -59,7 +59,7 @@ function checkAnswer() {
         currentQuestionIndex++;
         document.querySelector('.form-control').value = '';
         if (correctAnswers === 2) {
-            document.querySelector('.btn-warning').textContent = 'Finish';
+            document.querySelector('.btn-primary').textContent = 'Finish';
         }
         if (correctAnswers === 3) {
             endGame();
@@ -85,7 +85,7 @@ function endGame() {
 
     const finalTimeElement = document.getElementById('finalTime');
     finalTimeElement.textContent = `${minutes}:${seconds}`;
-    
+
     // Set warna background, padding, borderRadius, dan margin dari finalTimeElement
     finalTimeElement.style.backgroundColor = currentBackgroundColor;
     finalTimeElement.style.padding = "10px 15px";
@@ -101,7 +101,7 @@ function endGame() {
 
     // Nonaktifkan keypad
     document.querySelector('.form-control').disabled = true;
-    document.querySelectorAll('.btn-dark, .btn-danger, .btn-warning').forEach(btn => {
+    document.querySelectorAll('.btn-dark, .btn-danger, .btn-primary').forEach(btn => {
         btn.disabled = true;
     });
 
@@ -154,7 +154,7 @@ function savePlayerRecord() {
         mistakes: mistakes,
         bgColor: savedBackgroundColor  // Gunakan warna yang diambil dari local storage
     });
-    
+
     // Mengurutkan playerRecords berdasarkan waktu tercepat
     playerRecords.sort((a, b) => a.time - b.time);
 
@@ -182,28 +182,49 @@ function savePlayerRecord() {
 function displayRankings() {
     const rankingsContainer = document.getElementById('rankingsList');
     const records = JSON.parse(localStorage.getItem('playerRecords')) || [];
-    rankingsContainer.innerHTML = '<h3></h3>';
+    
+    rankingsContainer.innerHTML = '';  // Ini untuk membersihkan konten sebelumnya
+
     const topFiveRecords = records.slice(0, 5);
     topFiveRecords.forEach((record, index) => {
         const minutes = Math.floor(record.time / 60).toString().padStart(2, '0');
         const seconds = (record.time % 60).toString().padStart(2, '0');
-        rankingsContainer.innerHTML += `
-    <div class="rank-item">
-        ${index + 1}. ${record.name} - 
-        <span class="record-time" 
-              style="background-color:${record.bgColor}; 
-                     padding: 10px 15px; 
-                     border-radius: 20px; 
-                     margin: 10px 0;">
-              ${minutes}:${seconds}
-        </span> 
-        - Mistakes: ${record.mistakes}
-    </div>
-`;
+        
+        const mistakesDisplay = record.mistakes === 0 ? 
+            `No Mistakes <svg class="bi me-2 text-success" width="16" height="16"><use xlink:href="#check-circle-fill"/></svg>` : 
+            `Mistakes: ${record.mistakes} <span style="color: #dc3545;">x</span>`;
+        
+        let backgroundColorStyle = index === 0 ? '' : `background-color:${record.bgColor};`;
 
-
+        if(index === 0) {  // Jika peringkat 1
+            rankingsContainer.innerHTML += `
+                <div class="alert alert-warning">
+                    ${index + 1}. ${record.name} - 
+                    <span>
+                          ${minutes}:${seconds}
+                    </span> 
+                    - ${mistakesDisplay}
+                </div>
+            `;
+        } else {
+            rankingsContainer.innerHTML += `
+                <div class="rank-item">
+                    ${index + 1}. ${record.name} - 
+                    <span class="record-time" 
+                          style="${backgroundColorStyle} 
+                                 padding: 10px 15px; 
+                                 border-radius: 20px; 
+                                 margin: 10px 0;">
+                          ${minutes}:${seconds}
+                    </span> 
+                    - ${mistakesDisplay}
+                </div>
+            `;
+        }
     });
 }
+
+
 
 function startStopwatch() {
     clearInterval(stopwatchInterval);
@@ -237,7 +258,7 @@ document.querySelector('.btn-danger').addEventListener('click', () => {
     input.value = input.value.slice(0, -1);
 });
 
-document.querySelector('.btn-warning').addEventListener('click', checkAnswer);
+document.querySelector('.btn-primary').addEventListener('click', checkAnswer);
 document.querySelector('.btn-success').addEventListener('click', startGame);
 
 function showAlert() {
@@ -249,7 +270,7 @@ function showAlert() {
                 <path fill="currentColor" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
             </svg>
             <div>
-                Jawaban Anda benar!
+                Betul!
             </div>
         </div>
     `;
@@ -276,7 +297,7 @@ function restartGame() {
     document.getElementById('stopwatch').textContent = '00:00';
     document.querySelector('.form-control').value = '';
     document.getElementById('question').innerText = '';
-    document.querySelector('.btn-warning').textContent = 'Submit';
+    document.querySelector('.btn-primary').textContent = 'Submit';
     questions = generateUniqueQuestions(20);
     startGame();
 }
