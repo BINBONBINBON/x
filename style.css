@@ -43,6 +43,28 @@ button {
     width: 100px;
 }
 
+#alert-danger-container {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    z-index: 1000;
+    width: 100px;
+}
+
+.alert-success, .alert-danger {
+    animation: slideDown 0.5s forwards;
+}
+
+@keyframes slideDown {
+    0% {
+        transform: translateY(-100%);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
 #endGameModal .modal-footer .btn-primary {
     display: none;
 }
@@ -57,6 +79,19 @@ button {
     margin: 10px 0;
 }
 
+.wiggle-animation {
+    animation: wiggle 0.2s ease-in-out 2; 
+}
+
+@keyframes wiggle {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateY(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateY(0); }
+}
+
+
 
 .record-time {
     padding: 10px 15px;
@@ -68,16 +103,4 @@ button {
     padding: 10px 0;
 }
 
-.alert-success {
-    animation: slideDown 0.5s forwards;
-}
 
-@keyframes slideDown {
-    0% {
-        transform: translateY(-100%);
-    }
-
-    100% {
-        transform: translateY(0);
-    }
-}

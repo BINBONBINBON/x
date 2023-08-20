@@ -5,7 +5,7 @@ let stopwatchInterval;
 let elapsedTime = 0; // dalam detik
 let mistakes = 0;
 let previousQuestions = [];
-let questions;
+let questions;  
 
 function generateRandomNumber(max) {
     return Math.floor(Math.random() * max) + 1;
@@ -47,21 +47,37 @@ function displayQuestion() {
 }
 
 function checkAnswer() {
+    const userAnswerInput = document.querySelector('.form-control');
+
+    if (!userAnswerInput.value.trim()) { // jika input kosong
+        let modal = new bootstrap.Modal(document.getElementById('emptyInputModal'));
+        modal.show();
+        return; // Keluar dari fungsi sehingga tidak memproses lebih lanjut
+    }
+
+    const userAnswer = parseInt(userAnswerInput.value);
     const [a, b] = questions[currentQuestionIndex];
-    const userAnswer = parseInt(document.querySelector('.form-control').value);
+
     if (userAnswer !== a * b) {
         mistakes++;
-        let modal = new bootstrap.Modal(document.getElementById('exampleModal'));
-        modal.show();
+        showDangerAlert();
+
+        // Tambahkan animasi wiggle ke input
+        userAnswerInput.classList.add('wiggle-animation');
+
+        // Hapus animasi setelah selesai
+        setTimeout(() => {
+            userAnswerInput.classList.remove('wiggle-animation');
+        }, 400);  // 400ms (0.2s * 2) sesuai durasi animasi
     } else {
         showAlert();
         correctAnswers++;
         currentQuestionIndex++;
         document.querySelector('.form-control').value = '';
-        if (correctAnswers === 2) {
+        if (correctAnswers === 19) {
             document.querySelector('.btn-primary').textContent = 'Finish';
         }
-        if (correctAnswers === 3) {
+        if (correctAnswers === 20) {
             endGame();
         } else {
             displayQuestion();
@@ -108,22 +124,44 @@ function endGame() {
     // Hilangkan soal yang ditampilkan
     document.getElementById('question').innerText = '';
 
-    // Tentukan apakah pengguna mendapat peringkat dalam 5 besar
+    // Mengambil catatan pemain dari localStorage
     let playerRecords = JSON.parse(localStorage.getItem('playerRecords')) || [];
-    if (playerRecords.length >= 5 && timeTaken > playerRecords[4].time) {
+
+    // Jika ada setidaknya 5 catatan dan waktu pemain saat ini lebih lambat ATAU SAMA DENGAN peringkat 5
+    if (playerRecords.length >= 5 && timeTaken >= playerRecords[4].time) {  // perhatikan bahwa saya mengganti > menjadi >=
+        const timeDifference = timeTaken - playerRecords[4].time;
+        const timeDifferenceElement = document.getElementById('timeDifference');
+        if (timeTaken > playerRecords[4].time) {  // hanya menampilkan selisih jika waktu pemain lebih lambat, tidak sama
+            timeDifferenceElement.textContent = `Your time is ${timeDifference} seconds slower than the 5th rank.`;
+        } else {
+            timeDifferenceElement.textContent = `You have the same time as the 5th rank :( Try it faster.`;
+        }
+
+        // Tampilkan informasi selisih waktu
+        document.getElementById('timeDifferenceInfo').style.display = 'block';
+
         // Sembunyikan tombol Save dan hanya tampilkan tombol Close
         const modalFooter = document.querySelector("#endGameModal .modal-footer");
         modalFooter.innerHTML = '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>';
+    } else {
+        // Sembunyikan informasi selisih waktu
+        document.getElementById('timeDifferenceInfo').style.display = 'none';
     }
 
     // Tampilkan modal
     let modal = new bootstrap.Modal(document.getElementById('endGameModal'));
     modal.show();
 
-    // Tampilkan teks "Ranking"
-    document.getElementById('rankingTitle').style.display = 'block';
-    displayRankings();
+    // Sementara sembunyikan teks "Ranking"
+    document.getElementById('rankingTitle').style.display = 'none';
 }
+
+
+
+
+
+
+
 
 
 function calculateBackgroundColor(timeInSeconds) {
@@ -155,13 +193,24 @@ function savePlayerRecord() {
         bgColor: savedBackgroundColor  // Gunakan warna yang diambil dari local storage
     });
 
-    // Mengurutkan playerRecords berdasarkan waktu tercepat
-    playerRecords.sort((a, b) => a.time - b.time);
+    // Mengurutkan playerRecords
+    playerRecords.sort((a, b) => {
+        // Jika waktu sama, bandingkan berdasarkan jumlah kesalahan.
+        if (a.time === b.time) {
+            return a.mistakes - b.mistakes;
+        }
+
+        // Urutkan berdasarkan waktu.
+        return a.time - b.time;
+    });
 
     // Memotong list untuk mengambil hanya 5 peringkat terbaik
     playerRecords = playerRecords.slice(0, 5);
 
     localStorage.setItem('playerRecords', JSON.stringify(playerRecords));
+
+    // Tampilkan teks "Ranking" setelah catatan disimpan
+    document.getElementById('rankingTitle').style.display = 'block';
 
     // Update rankings
     displayRankings();
@@ -182,21 +231,21 @@ function savePlayerRecord() {
 function displayRankings() {
     const rankingsContainer = document.getElementById('rankingsList');
     const records = JSON.parse(localStorage.getItem('playerRecords')) || [];
-    
+
     rankingsContainer.innerHTML = '';  // Ini untuk membersihkan konten sebelumnya
 
     const topFiveRecords = records.slice(0, 5);
     topFiveRecords.forEach((record, index) => {
         const minutes = Math.floor(record.time / 60).toString().padStart(2, '0');
         const seconds = (record.time % 60).toString().padStart(2, '0');
-        
-        const mistakesDisplay = record.mistakes === 0 ? 
-            `No Mistakes <svg class="bi me-2 text-success" width="16" height="16"><use xlink:href="#check-circle-fill"/></svg>` : 
+
+        const mistakesDisplay = record.mistakes === 0 ?
+            `No Mistakes <svg class="bi me-2 text-success" width="16" height="16"><use xlink:href="#check-circle-fill"/></svg>` :
             `Mistakes: ${record.mistakes} <span style="color: #dc3545;">x</span>`;
-        
+
         let backgroundColorStyle = index === 0 ? '' : `background-color:${record.bgColor};`;
 
-        if(index === 0) {  // Jika peringkat 1
+        if (index === 0) {  // Jika peringkat 1
             rankingsContainer.innerHTML += `
                 <div class="alert alert-warning">
                     ${index + 1}. ${record.name} - 
@@ -233,10 +282,10 @@ function startStopwatch() {
         const minutes = Math.floor(elapsedTime / 60).toString().padStart(2, '0');
         const seconds = (elapsedTime % 60).toString().padStart(2, '0');
         document.getElementById('stopwatch').textContent = `${minutes}:${seconds}`;
-        if (elapsedTime >= 60) {
+        if (elapsedTime >= 180) { //UBAH WAKTU GRADASI, INI 3 MENIT
             document.getElementById('stopwatch').style.backgroundColor = '#dc3545';
         } else {
-            let opacity = elapsedTime / 60;
+            let opacity = elapsedTime / 180; //UBAH WAKTU GRADASI, INI 3 MENIT
             document.getElementById('stopwatch').style.backgroundColor = `rgba(255, 0, 0, ${opacity})`;
         }
     }, 1000);
@@ -271,6 +320,25 @@ function showAlert() {
             </svg>
             <div>
                 Betul!
+            </div>
+        </div>
+    `;
+    document.body.appendChild(alertContainer);
+    setTimeout(() => {
+        alertContainer.remove();
+    }, 3000);
+}
+
+function showDangerAlert() {
+    const alertContainer = document.createElement('div');
+    alertContainer.id = 'alert-danger-container';
+    alertContainer.innerHTML = `
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                <path fill="currentColor" d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+            <div>
+                Salah!
             </div>
         </div>
     `;
