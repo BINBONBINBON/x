@@ -74,10 +74,10 @@ function checkAnswer() {
         correctAnswers++;
         currentQuestionIndex++;
         document.querySelector('.form-control').value = '';
-        if (correctAnswers === 19) {
+        if (correctAnswers === 2) {
             document.querySelector('.btn-primary').textContent = 'Finish';
         }
-        if (correctAnswers === 20) {
+        if (correctAnswers === 3) {
             endGame();
         } else {
             displayQuestion();
