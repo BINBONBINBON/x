@@ -7,26 +7,6 @@ let mistakes = 0;
 let previousQuestions = [];
 let questions;
 
-let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-    return new bootstrap.Popover(popoverTriggerEl)
-})
-
-const buttonHint = document.getElementById('buttonHint');
-const popoverInstance = new bootstrap.Popover(buttonHint, {
-    trigger: 'hover',
-    content: "Hint",
-    placement: "right"
-});
-
-
-buttonHint.addEventListener('click', function() {
-    popoverInstance.hide();
-});
-
-
-
-
 function generateRandomNumber(max) {
     return Math.floor(Math.random() * max) + 1;
 }
@@ -66,7 +46,11 @@ function startGame() {
 function displayQuestion() {
     const [a, b] = questions[currentQuestionIndex];
     document.getElementById('question').innerText = `${a} x ${b} = ...`;
+
+    // Menampilkan buttonHint
+    document.getElementById('buttonHint').style.display = 'inline-block';
 }
+
 
 document.getElementById('buttonHint').addEventListener('click', function () {
     const fillMultiplicationData = (parentElementId) => {
@@ -125,10 +109,10 @@ function checkAnswer() {
         correctAnswers++;
         currentQuestionIndex++;
         document.querySelector('.form-control').value = '';
-        if (correctAnswers === 2) {
+        if (correctAnswers === 19) {
             document.querySelector('.btn-primary').textContent = 'Finish';
         }
-        if (correctAnswers === 3) {
+        if (correctAnswers === 20) {
             endGame();
         } else {
             displayQuestion();
@@ -154,7 +138,7 @@ function endGame() {
     finalTimeElement.textContent = `${minutes}:${seconds}`;
 
     // Set warna background, padding, borderRadius, dan margin dari finalTimeElement
-    finalTimeElement.style.backgroundColor = 'transparent';;
+    finalTimeElement.style.backgroundColor = 'transparent';
 
     // Tampilkan jumlah kesalahan di modal
     document.getElementById('mistakesCount').textContent = mistakes.toString();
@@ -171,6 +155,10 @@ function endGame() {
 
     // Hilangkan soal yang ditampilkan
     document.getElementById('question').innerText = '';
+
+    // Sembunyikan tombol hint
+    document.getElementById('buttonHint').style.display = 'none';
+
 
     // Mengambil catatan pemain dari localStorage
     let playerRecords = JSON.parse(localStorage.getItem('playerRecords')) || [];
