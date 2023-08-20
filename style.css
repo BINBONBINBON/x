@@ -25,6 +25,43 @@ body, html {
     margin: 20px 0;
 }
 
+.circle-button {
+    width: 50px;  /* Anda dapat mengatur ini sesuai kebutuhan */
+    height: 50px; /* Anda dapat mengatur ini sesuai kebutuhan */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+#buttonHint {
+    margin-left: -10px;  /* Mengatur seberapa dekat button dengan "..." pada question */
+}
+#buttonHint:hover{
+    background-color: transparent !important;
+}
+
+
+#hintModal .col-6, #hintModal .col-md {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    white-space: nowrap;
+    width: calc(50% - 10px); /* 50% dari lebar parent dikurangi margin */
+    max-width: calc(50% - 10px);
+}
+
+
+
+
+
+
 input,
 button {
     padding: 5px;

@@ -21,9 +21,36 @@
         <!-- INI STOPWATCH END -->
 
 
-        <!-- INI PERTANYAAN -->
-        <div id="question" class="text-center mt-5"></div>
-        <!-- INI PERTANYAAN END -->
+        <!-- INI PERTANYAAN DAN TOMBOL -->
+        <div class="text-center d-flex justify-content-center align-items-center">
+            <div id="question"></div>
+            <button type="button" class="btn btn-outline-warning circle-button" id="buttonHint" style="display: none; font-size: 30px; border: 0;" data-bs-container="body" data-bs-placement="right">
+                ?
+            </button>
+        </div>
+        <!-- INI PERTANYAAN DAN TOMBOL END -->
+
+        <!-- INI HINT MODAL -->
+        <div class="modal fade" id="hintModal" tabindex="-1" aria-labelledby="hintModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header justify-content-center">
+                        <h5 class="modal-title" id="hintModalLabel">Tabel Perkalian 1-10</h5>
+                        <button type="button" class="btn-close ms-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <div class="row" id="multiplicationRow">
+                            <!-- Isikan data perkalian dengan JavaScript untuk 1-10 -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- INI HINT MODAL END -->
 
         <!-- INI KEYPAD NUMERIK -->
         <div class="container">
@@ -71,7 +98,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
-                    Please fill in the answer! 
+                    Please fill in the answer!
                 </div>
             </div>
         </div>

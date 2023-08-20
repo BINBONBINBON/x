@@ -5,7 +5,27 @@ let stopwatchInterval;
 let elapsedTime = 0; // dalam detik
 let mistakes = 0;
 let previousQuestions = [];
-let questions;  
+let questions;
+
+let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+    return new bootstrap.Popover(popoverTriggerEl)
+})
+
+const buttonHint = document.getElementById('buttonHint');
+const popoverInstance = new bootstrap.Popover(buttonHint, {
+    trigger: 'hover',
+    content: "Hint",
+    placement: "right"
+});
+
+
+buttonHint.addEventListener('click', function() {
+    popoverInstance.hide();
+});
+
+
+
 
 function generateRandomNumber(max) {
     return Math.floor(Math.random() * max) + 1;
@@ -28,6 +48,8 @@ function startGame() {
     startTime = new Date().getTime();
     document.getElementById('stopwatch').style.backgroundColor = 'white';
     displayQuestion();
+    // Tampilkan tombol di samping pertanyaan
+    document.getElementById('buttonHint').style.display = 'inline-block';
     document.querySelector('.form-control').disabled = false;
     document.querySelectorAll('.btn-dark, .btn-danger, .btn-primary').forEach(btn => {
         btn.disabled = false;
@@ -43,8 +65,37 @@ function startGame() {
 
 function displayQuestion() {
     const [a, b] = questions[currentQuestionIndex];
-    document.getElementById('question').innerText = `${a} x ${b} = ... ?`;
+    document.getElementById('question').innerText = `${a} x ${b} = ...`;
 }
+
+document.getElementById('buttonHint').addEventListener('click', function () {
+    const fillMultiplicationData = (parentElementId) => {
+        let parentElement = document.getElementById(parentElementId);
+        parentElement.innerHTML = ""; // Clear previous content
+
+        for (let i = 1; i <= 10; i++) {
+            let col = document.createElement("div");
+            col.className = "col-6 col-md";
+
+            let multiplicationData = "";
+            for (let j = 1; j <= 10; j++) {
+                multiplicationData += `${i} x ${j} = ${i * j}<br>`;
+            }
+
+            col.innerHTML = multiplicationData;
+            parentElement.appendChild(col);
+        }
+    }
+
+    fillMultiplicationData("multiplicationRow");
+
+    let hintModal = new bootstrap.Modal(document.getElementById('hintModal'));
+    hintModal.show();
+});
+
+
+
+
 
 function checkAnswer() {
     const userAnswerInput = document.querySelector('.form-control');
@@ -103,10 +154,7 @@ function endGame() {
     finalTimeElement.textContent = `${minutes}:${seconds}`;
 
     // Set warna background, padding, borderRadius, dan margin dari finalTimeElement
-    finalTimeElement.style.backgroundColor = currentBackgroundColor;
-    finalTimeElement.style.padding = "10px 15px";
-    finalTimeElement.style.borderRadius = "20px";
-    finalTimeElement.style.margin = "10px 0";
+    finalTimeElement.style.backgroundColor = 'transparent';;
 
     // Tampilkan jumlah kesalahan di modal
     document.getElementById('mistakesCount').textContent = mistakes.toString();
@@ -357,6 +405,7 @@ function handleStartRestartClick() {
     }
 }
 
+
 function restartGame() {
     currentQuestionIndex = 0;
     correctAnswers = 0;
@@ -369,5 +418,13 @@ function restartGame() {
     questions = generateUniqueQuestions(20);
     startGame();
 }
+
+document.getElementById('endGameModal').addEventListener('hidden.bs.modal', function () {
+    displayRankings();
+});
+
+document.getElementById('saveRecordModal').addEventListener('shown.bs.modal', function () {
+    document.getElementById('playerName').focus();
+});
 
 questions = generateUniqueQuestions(20);
