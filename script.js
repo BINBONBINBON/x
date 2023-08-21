@@ -109,10 +109,10 @@ function checkAnswer() {
         correctAnswers++;
         currentQuestionIndex++;
         document.querySelector('.form-control').value = '';
-        if (correctAnswers === 1) {
+        if (correctAnswers === 19) {
             document.querySelector('.buttonStart').textContent = 'Finish';
         }
-        if (correctAnswers === 2) {
+        if (correctAnswers === 20) {
             endGame();
         } else {
             displayQuestion();
