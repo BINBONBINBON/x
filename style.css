@@ -70,9 +70,10 @@ button {
 
 .alert {
     padding: 10px;
+    margin-top: 10px;
 }
 
-#alert-container {
+#alert-success-container {
     position: fixed;
     top: 5px;
     right: 5px;

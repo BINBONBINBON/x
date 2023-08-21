@@ -31,14 +31,14 @@ function startGame() {
     // Tampilkan tombol di samping pertanyaan
     document.getElementById('buttonHint').style.display = 'inline-block';
     document.querySelector('.form-control').disabled = false;
-    document.querySelectorAll('.btn-dark, .btn-danger, .btn-primary').forEach(btn => {
+    document.querySelectorAll('.buttonKeypad, .buttonDelete, .buttonStart').forEach(btn => {
         btn.disabled = false;
     });
     const startRestartButton = document.getElementById('startRestartButton');
     startRestartButton.disabled = true;
-    const submitButton = document.querySelector('.btn-primary');
-    if (submitButton.textContent === 'Start') {
-        submitButton.textContent = 'Submit';
+    const playButton = document.querySelector('.buttonStart');
+    if (playButton.textContent === 'Start') {
+        playButton.textContent = 'Restart';
     }
     startStopwatch();
 }
@@ -109,10 +109,10 @@ function checkAnswer() {
         correctAnswers++;
         currentQuestionIndex++;
         document.querySelector('.form-control').value = '';
-        if (correctAnswers === 19) {
-            document.querySelector('.btn-primary').textContent = 'Finish';
+        if (correctAnswers === 1) {
+            document.querySelector('.buttonStart').textContent = 'Finish';
         }
-        if (correctAnswers === 20) {
+        if (correctAnswers === 2) {
             endGame();
         } else {
             displayQuestion();
@@ -149,7 +149,7 @@ function endGame() {
 
     // Nonaktifkan keypad
     document.querySelector('.form-control').disabled = true;
-    document.querySelectorAll('.btn-dark, .btn-danger, .btn-primary').forEach(btn => {
+    document.querySelectorAll('.buttonKeypad, .buttonDelete, .buttonStart').forEach(btn => {
         btn.disabled = true;
     });
 
@@ -178,7 +178,13 @@ function endGame() {
 
         // Sembunyikan tombol Save dan hanya tampilkan tombol Close
         const modalFooter = document.querySelector("#endGameModal .modal-footer");
-        modalFooter.innerHTML = '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>';
+        modalFooter.innerHTML = '<button type="button" class="btn btn-secondary" id="endGameCloseButton3" data-bs-dismiss="modal">Show Ranking</button>';
+
+        document.getElementById('endGameCloseButton3').addEventListener('click', function () {
+            document.getElementById('rankingTitle').style.display = 'block';
+            displayRankings();
+        });
+
     } else {
         // Sembunyikan informasi selisih waktu
         document.getElementById('timeDifferenceInfo').style.display = 'none';
@@ -331,24 +337,24 @@ function stopStopwatch() {
     clearInterval(stopwatchInterval);
 }
 
-document.querySelectorAll('.btn-dark').forEach(btn => {
+document.querySelectorAll('.buttonKeypad').forEach(btn => {
     btn.addEventListener('click', (e) => {
         const input = document.querySelector('.form-control');
         input.value += e.target.innerText;
     });
 });
 
-document.querySelector('.btn-danger').addEventListener('click', () => {
+document.querySelector('.buttonDelete').addEventListener('click', () => {
     const input = document.querySelector('.form-control');
     input.value = input.value.slice(0, -1);
 });
 
-document.querySelector('.btn-primary').addEventListener('click', checkAnswer);
+document.querySelector('.buttonStart').addEventListener('click', checkAnswer);
 document.querySelector('.btn-success').addEventListener('click', startGame);
 
 function showAlert() {
     const alertContainer = document.createElement('div');
-    alertContainer.id = 'alert-container';
+    alertContainer.id = 'alert-success-container';
     alertContainer.innerHTML = `
         <div class="alert alert-success d-flex align-items-center" role="alert">
             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
@@ -402,17 +408,31 @@ function restartGame() {
     document.getElementById('stopwatch').textContent = '00:00';
     document.querySelector('.form-control').value = '';
     document.getElementById('question').innerText = '';
-    document.querySelector('.btn-primary').textContent = 'Submit';
+    document.querySelector('.buttonStart').textContent = 'Submit';
     questions = generateUniqueQuestions(20);
     startGame();
 }
 
-document.getElementById('endGameModal').addEventListener('hidden.bs.modal', function () {
+document.getElementById('endGameCloseButton1').addEventListener('click', function () {
+    document.getElementById('rankingTitle').style.display = 'block';
     displayRankings();
 });
+
+document.getElementById('endGameCloseButton2').addEventListener('click', function () {
+    document.getElementById('rankingTitle').style.display = 'block';
+    displayRankings();
+});
+
+
+document.getElementById('saveRecordCloseButton').addEventListener('click', function () {
+    document.getElementById('rankingTitle').style.display = 'block';
+    displayRankings();
+});
+
 
 document.getElementById('saveRecordModal').addEventListener('shown.bs.modal', function () {
     document.getElementById('playerName').focus();
 });
+
 
 questions = generateUniqueQuestions(20);
